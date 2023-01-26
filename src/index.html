@@ -4,14 +4,58 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Homework 10</title>
+    <title>Homework 11</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/modern-normalize/1.1.0/modern-normalize.min.css"
+      integrity="sha512-wpPYUAdjBVSE4KJnH1VR1HeZfpl1ub8YT/NKx4PuQ5NmX2tKuGu6U/JRp5y+Y8XG2tV+wKQpNHVUX03MfMFn9Q=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="stylesheet" href="./css/common.css" />
+    <link rel="stylesheet" href="./css/gallery.css" />
   </head>
-  <body>
-    <input type="text" id="search-box" />
-    <ul class="country-list"></ul>
-    <div class="country-info is-hidden"></div>
 
-    <script src="index.js" type="module"></script>
+  <body>
+    <form class="search-form" id="search-form">
+      <input
+        type="text"
+        name="searchQuery"
+        autocomplete="off"
+        placeholder="Search images..."
+      />
+      <button type="submit">Search</button>
+    </form>
+
+    <div class="gallery js-gallery">
+      <!-- Карточки изображений -->
+    </div>
+    
+    <button type="button" class="load-more-btn is-hidden">GIVE ME MORE PICTURE, BITCH!</button>
+
+
+
+
+
+
+        <!-- <section class="gallery-section">
+      <div class="container">
+        <form class="search-fornpmm js-search-form">
+          <input
+            type="text"
+            name="user_search_query"
+            class="search-input"
+            required
+          />
+          <button type="submit" class="search-btn">search</button>
+        </form>
+        <ul class="gallery js-gallery list"></ul>
+        <div class="target-element"></div>
+        <button type="button" class="load-more js-load-more is-hidden">
+          Load more
+        </button>
+      </div>
+    </section> -->
+    <script type="module" src="./js/index.js"></script>
   </body>
 </html>
-
