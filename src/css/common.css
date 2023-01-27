@@ -27,11 +27,11 @@ ol {
   padding-left: 0;
 }
 
-.list {
+li {
   list-style: none;
 }
 
-.link {
+a {
   text-decoration: none;
 }
 
@@ -43,8 +43,4 @@ ol {
   margin-right: auto;
 }
 
-.is-hidden{
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-}
+

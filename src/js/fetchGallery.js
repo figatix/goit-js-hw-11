@@ -7,6 +7,7 @@ export default class PhotoAPI {
   constructor() {
     this.page = null;
     this.query = null;
+    this.per_page = 12;
   }
 
   fetchQuery() {
@@ -16,7 +17,7 @@ export default class PhotoAPI {
       image_type: 'photo',
       orientation: 'horizontal',
       safesearch: true,
-      per_page: 5,
+      per_page: this.per_page,
       page: this.page
     })
 

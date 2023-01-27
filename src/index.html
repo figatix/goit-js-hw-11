@@ -17,22 +17,26 @@
   </head>
 
   <body>
-    <form class="search-form" id="search-form">
-      <input
-        type="text"
-        name="searchQuery"
-        autocomplete="off"
-        placeholder="Search images..."
-      />
-      <button type="submit">Search</button>
-    </form>
+    <section class="gallery-section">
+      <div class="container">
+        <form class="search-form" id="search-form">
+          <input class="search-input" type="text" name="searchQuery" autocomplete="off" placeholder="Search images..."
+            required />
+          <button type="submit" class="search-btn">Search</button>
+        </form>
+        
+        <div class="gallery js-gallery">
+          <!-- Карточки изображений -->
+        </div>
+        
+        <button type="button" class="load-more is-hidden">GIVE ME MORE PICTURE, BITCH!</button>
+      </div>
 
-    <div class="gallery js-gallery">
-      <!-- Карточки изображений -->
-    </div>
-    
-    <button type="button" class="load-more-btn is-hidden">GIVE ME MORE PICTURE, BITCH!</button>
 
+        <a class="up-link" href="#search-form">UP!</a>
+
+    </section>
+      
 
 
 

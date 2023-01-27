@@ -7,39 +7,49 @@ const photoAPI = new PhotoAPI;
 
 const formEl = document.querySelector('#search-form')
 const galleryEl = document.querySelector('.js-gallery')
-const loadMoreBtn = document.querySelector('.load-more-btn')
+const loadMoreBtn = document.querySelector('.load-more')
 
 
 function onSubmitForm(e) {
   e.preventDefault()
   photoAPI.query = e.currentTarget.elements.searchQuery.value
   photoAPI.page = 1;
+  loadMoreBtn.classList.add('is-hidden')
 
-  if (photoAPI.query === '') {
-    Notify.failure('Dyrak chu sho?')
+  if (photoAPI.query.trim() === '') {
+    Notify.failure('Ooops!')
     galleryEl.innerHTML = ''
     return
   }
 
   photoAPI.fetchQuery()
   .then(data => {
+
     if(data.total === 0){
       Notify.failure('Sorry, there are no images matching your search query. Please try again.')
       return
-    } else if (data.total >= 5) {
+    } 
+    Notify.success(`Hooray! We found ${data.totalHits} images.`)
+    galleryEl.innerHTML = createCards(data.hits)
+
+    if (data.total >= photoAPI.per_page) {
       loadMoreBtn.classList.remove('is-hidden')
     }
-
-    galleryEl.innerHTML = createCards(data.hits)
   })
   .catch(err => console.log(err));
+
 }
 
 function onLoadMoreBtnClick(e) {
-  
   photoAPI.page += 1;
 
   photoAPI.fetchQuery().then(data => {
+
+    console.log('data.hits' ,data.hits);
+    if(data.hits.length < photoAPI.per_page){
+      Notify.info("We're sorry, but you've reached the end of search results.")
+      loadMoreBtn.classList.add('is-hidden')
+    }
     galleryEl.insertAdjacentHTML( 'beforeend', createCards(data.hits))
   }).catch(err => console.log(err))
 }
