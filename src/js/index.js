@@ -1,5 +1,6 @@
 
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
+import axios from 'axios'
 import createCards from './templates/cards-template.js'
 import PhotoAPI from './fetchGallery.js'
 
@@ -23,7 +24,8 @@ function onSubmitForm(e) {
   }
 
   photoAPI.fetchQuery()
-  .then(data => {
+    .then(({data}) => {
+    console.log('data',data);
 
     if(data.total === 0){
       Notify.failure('Sorry, there are no images matching your search query. Please try again.')
@@ -32,7 +34,7 @@ function onSubmitForm(e) {
     Notify.success(`Hooray! We found ${data.totalHits} images.`)
     galleryEl.innerHTML = createCards(data.hits)
 
-    if (data.total >= photoAPI.per_page) {
+    if (data.total > photoAPI.per_page) {
       loadMoreBtn.classList.remove('is-hidden')
     }
   })
@@ -42,15 +44,26 @@ function onSubmitForm(e) {
 
 function onLoadMoreBtnClick(e) {
   photoAPI.page += 1;
+  loadMoreBtn.classList.add('is-hidden')
 
-  photoAPI.fetchQuery().then(data => {
+  photoAPI.fetchQuery().then(({data}) => {
+    console.log('data.hits', data.hits);
+    console.log('data.hits.length < photoAPI.per_page', data.hits.length < photoAPI.per_page);
+    loadMoreBtn.classList.remove('is-hidden')
+    galleryEl.insertAdjacentHTML('beforeend', createCards(data.hits))
 
-    console.log('data.hits' ,data.hits);
     if(data.hits.length < photoAPI.per_page){
       Notify.info("We're sorry, but you've reached the end of search results.")
       loadMoreBtn.classList.add('is-hidden')
     }
-    galleryEl.insertAdjacentHTML( 'beforeend', createCards(data.hits))
+
+    /*
+    
+    ! if (data.hits === []) {
+      loadMoreBtn.classList.add('is-hidden')
+    }
+
+    */
   }).catch(err => console.log(err))
 }
 
