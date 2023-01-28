@@ -1,72 +1,69 @@
 
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
-import axios from 'axios'
 import createCards from './templates/cards-template.js'
 import PhotoAPI from './fetchGallery.js'
 
-const photoAPI = new PhotoAPI;
+const photoAPI = new PhotoAPI();
 
 const formEl = document.querySelector('#search-form')
 const galleryEl = document.querySelector('.js-gallery')
 const loadMoreBtn = document.querySelector('.load-more')
 
+async function onSubmitForm(e) {
+  try {
+    e.preventDefault()
+    loadMoreBtn.classList.add('is-hidden')
 
-function onSubmitForm(e) {
-  e.preventDefault()
-  photoAPI.query = e.currentTarget.elements.searchQuery.value
-  photoAPI.page = 1;
-  loadMoreBtn.classList.add('is-hidden')
+    photoAPI.query = e.currentTarget.elements.searchQuery.value
+    photoAPI.page = 1;
 
-  if (photoAPI.query.trim() === '') {
-    Notify.failure('Ooops!')
-    galleryEl.innerHTML = ''
-    return
-  }
+    if (photoAPI.query.trim() === '') {
+      Notify.failure('Ooops! You are trying to send an empty request...')
+      e.target.reset();
+      galleryEl.innerHTML = ''
+      return
+    }
 
-  photoAPI.fetchQuery()
-    .then(({data}) => {
-    console.log('data',data);
+    const response = await photoAPI.fetchQuery();
+    const {data} = response
 
     if(data.total === 0){
       Notify.failure('Sorry, there are no images matching your search query. Please try again.')
+      e.target.reset();
+      galleryEl.innerHTML = '';
       return
     } 
+
     Notify.success(`Hooray! We found ${data.totalHits} images.`)
     galleryEl.innerHTML = createCards(data.hits)
 
     if (data.total > photoAPI.per_page) {
       loadMoreBtn.classList.remove('is-hidden')
     }
-  })
-  .catch(err => console.log(err));
-
+  } catch(err){
+    console.log(err);
+  }
 }
 
-function onLoadMoreBtnClick(e) {
+async function onLoadMoreBtnClick(e) {
   photoAPI.page += 1;
   loadMoreBtn.classList.add('is-hidden')
 
-  photoAPI.fetchQuery().then(({data}) => {
-    console.log('data.hits', data.hits);
-    console.log('data.hits.length < photoAPI.per_page', data.hits.length < photoAPI.per_page);
-    loadMoreBtn.classList.remove('is-hidden')
+  try {
+    const {data} = await photoAPI.fetchQuery();
     galleryEl.insertAdjacentHTML('beforeend', createCards(data.hits))
 
-    if(data.hits.length < photoAPI.per_page){
+    const maxPages = Math.ceil(data.totalHits / photoAPI.per_page);
+    if (maxPages === photoAPI.page) {
       Notify.info("We're sorry, but you've reached the end of search results.")
-      loadMoreBtn.classList.add('is-hidden')
+      return
     }
 
-    /*
-    
-    ! if (data.hits === []) {
-      loadMoreBtn.classList.add('is-hidden')
-    }
-
-    */
-  }).catch(err => console.log(err))
+    loadMoreBtn.classList.remove('is-hidden')
+  } catch (err){
+    console.log(err);
+  }
 }
-
 
 formEl.addEventListener('submit', onSubmitForm)
 loadMoreBtn.addEventListener('click', onLoadMoreBtnClick)
