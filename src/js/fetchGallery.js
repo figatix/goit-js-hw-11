@@ -8,7 +8,7 @@ export default class PhotoAPI {
   constructor() {
     this.page = null;
     this.query = null;
-    this.per_page = 18;
+    this.per_page = 39;
   }
 
   fetchQuery() {
