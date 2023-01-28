@@ -102,10 +102,17 @@
   box-shadow: 0 3px 8px 0 rgb(0 0 0 / 50%);
   border-radius: 5px;
   overflow: hidden;
-
 }
 
 .gallery-img {
+  transition: transform 250ms linear;
+}
+
+.gallery-img:hover{
+  transform: scale(1.08) 
+}
+
+.gallery-img:hover {
   object-fit: cover;
 }
 
