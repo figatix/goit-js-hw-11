@@ -2,12 +2,16 @@
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import createCards from './templates/cards-template.js'
 import PhotoAPI from './fetchGallery.js'
+import SimpleLightbox from "simplelightbox";
+import "simplelightbox/dist/simple-lightbox.min.css";
+
 
 const photoAPI = new PhotoAPI();
 
 const formEl = document.querySelector('#search-form')
 const galleryEl = document.querySelector('.js-gallery')
 const loadMoreBtn = document.querySelector('.load-more')
+
 
 async function onSubmitForm(e) {
   try {
@@ -40,6 +44,8 @@ async function onSubmitForm(e) {
     if (data.total > photoAPI.per_page) {
       loadMoreBtn.classList.remove('is-hidden')
     }
+
+    lightbox()
   } catch(err){
     console.log(err);
   }
@@ -51,7 +57,7 @@ async function onLoadMoreBtnClick(e) {
 
   try {
     const {data} = await photoAPI.fetchQuery();
-    galleryEl.insertAdjacentHTML('beforeend', createCards(data.hits))
+    galleryEl.insertAdjacentHTML('beforeend', createCards(data.hits));
 
     const maxPages = Math.ceil(data.totalHits / photoAPI.per_page);
     if (maxPages === photoAPI.page) {
@@ -60,9 +66,30 @@ async function onLoadMoreBtnClick(e) {
     }
 
     loadMoreBtn.classList.remove('is-hidden')
+
+    lightbox()
+    slowScrollDown()
   } catch (err){
     console.log(err);
   }
+}
+
+function lightbox () {
+  new SimpleLightbox('.photo-card a', {
+    captionsData: "alt",
+    captionPosition: 'bottom',
+    captionDelay: 250,
+    overlayOpacity: 0.8,
+  });
+}
+
+function slowScrollDown() {
+  const { height: cardHeight } = document.querySelector(".js-gallery").firstElementChild.getBoundingClientRect();
+
+  window.scrollBy({
+    top: cardHeight*2,
+    behavior: "smooth",
+  });
 }
 
 formEl.addEventListener('submit', onSubmitForm)

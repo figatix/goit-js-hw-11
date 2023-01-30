@@ -5,7 +5,9 @@ export default function createCards(arrOfCards) {
   const cardsByString = arrOfCards.map(el => {
     return `
     <div class="photo-card">
-      <img class="gallery-img" src="${el.webformatURL}" alt="${el.tags}" loading="lazy" />
+      <a href="${el.largeImageURL}">
+        <img class="gallery-img" src="${el.webformatURL}" alt="${el.tags}" loading="lazy" />
+      </a>
       <div class="info">
         <p class="info-item">
           <b>Likes</b>
