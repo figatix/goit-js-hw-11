@@ -62,6 +62,8 @@ async function onLoadMoreBtnClick(e) {
     const maxPages = Math.ceil(data.totalHits / photoAPI.per_page);
     if (maxPages === photoAPI.page) {
       Notify.info("We're sorry, but you've reached the end of search results.")
+      lightbox()
+      slowScrollDown()
       return
     }
 
