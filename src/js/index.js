@@ -94,3 +94,5 @@ function slowScrollDown() {
 
 formEl.addEventListener('submit', onSubmitForm)
 loadMoreBtn.addEventListener('click', onLoadMoreBtnClick)
+
+// 
